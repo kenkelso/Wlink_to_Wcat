@@ -220,6 +220,9 @@ begin
                      begin
                           if (Min = '00') or (Min = '15') or (Min = '30') or (Min = '45') then
                              begin
+                             
+                             //Make this a procedure
+                             
                                   sOut := intToStr(i) + ' t:' + t2;
                                   sOut := sOut + ' T:' + S[2];
                                   sOut := sOut + ' Ti:' + S[20];
