@@ -15,8 +15,19 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Label10: TLabel;
+    xRain: TComboBox;
+    Label8: TLabel;
+    Label9: TLabel;
+    xBar: TComboBox;
+    xDate: TComboBox;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    xWdir: TComboBox;
+    xTemp: TComboBox;
+    xWind: TComboBox;
     SampleTime15: TCheckBox;
-    mmddyy: TCheckBox;
     Edit1: TEdit;
     Label1: TLabel;
     Label2: TLabel;
@@ -28,6 +39,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure ddmmyyClick(Sender: TObject);
+    procedure Label3Click(Sender: TObject);
     procedure mmddyyClick(Sender: TObject);
 
   private
@@ -54,7 +66,7 @@ procedure TForm1.Button1Click(Sender: TObject);
 
 var
   tfOut, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12: TextFile;
-  sIn, sOut, t1, t2, t3, t4, P, Py, Pm, CurrentDay, CurrentMonth, CurrentYear, Min, sTemp: string;
+  sIn, sOut, t1, t2, t3, t4, P, Py, Pm, CurrentDay, CurrentMonth, CurrentYear, Min, sTemp, Verify: string;
   S : TStringList;
   i, TimeInt : integer;
   DailyRain, MonthlyRain, YearlyRain: real;
@@ -138,7 +150,7 @@ begin
              i := i + 1;
              readln(tfIn, sIn);
              //parse space delimited file
-
+             // first take out the space in 12 hour time.
              if Pos('p', sIn) > 0 then
                 begin
                      sTemp := LeftStr(sIn, pos('p', sIn) - 2) + RightStr(sIn, Length(sIn) - pos('p', sIn) + 1);
@@ -156,11 +168,12 @@ begin
              //deal with date and time
              t2 := '';
              t1 := S[0];  //put string in a stringlist
-             if t1[1] <> '-' then
+          //   showmessage(t1);
+             if (t1[1] <> '-') and (S[2] <> '---') then
                 begin
                      if CurrentYear = '' then CurrentYear := t1[7] + t1[8];
                      if CurrentYear <> t1[7] + t1[8] then exit;
-                     if mmddyy.Checked then t2 := t1[4] + t1[5]
+                     if xDate.Text = 'MM/DD/YY' then t2 := t1[4] + t1[5]
                      else t2 := t1[1] + t1[2];
                      //calculate daily and monthly rain
                      //showmessage(t2);
@@ -171,10 +184,13 @@ begin
                      end;
                      DailyRain := DailyRain + strToFloat(S[16]);
                      //showmessage('DailyRain='+S[16]);
-                     P := floatToStrF(DailyRain, ffFixed , 4, 2);
+                     //Convert DailyRain to mm if reqd.
+                     if xRain.Text = 'Inch' then P := floatToStrF(DailyRain * 25.4, ffFixed , 4, 2)
+                        else P := floatToStrF(DailyRain, ffFixed , 4, 2);
+
                      t3 := S[0];
                      //showmessage(t3);
-                     if mmddyy.Checked then t4 := t3[1] + t3[2]
+                     if xDate.Text = 'MM/DD/YY' then t4 := t3[1] + t3[2]
                      else t4 := t3[4] + t3[5];
                  //    showmessage('CurrentMonth='+t4);
                      if CurrentMonth <> t4 then
@@ -184,14 +200,16 @@ begin
                              i := 0;
                          end;
                   MonthlyRain := MonthlyRain + strToFloat(S[16]);
-                  Pm := floatToStrF(MonthlyRain, ffFixed ,4, 2);
+                  //Convert MonthlyRain to mm if Reqd.
+                  if xRain.Text = 'Inch' then Pm := floatToStrF(MonthlyRain * 25.4, ffFixed ,4, 2)
+                     else Pm := floatToStrF(MonthlyRain, ffFixed ,4, 2);
                   //showmessage('PM='+Pm);
                   YearlyRain := YearlyRain + strToFloat(S[16]);
-                  Py := floatToStrF(YearlyRain, ffFixed, 4, 2);
+                  //Convert YealyRain to mm if Reqd.
+                  if xRain.Text = 'Inch' then Py := floatToStrF(YearlyRain * 25.4, ffFixed, 4, 2)
+                     else Py := floatToStrF(YearlyRain, ffFixed, 4, 2);
                   t1 := S[1];      //Get Time
-
                   // if 12 hour convert to 24 hour
-
                   if (pos('a', t1) > 0) then
                      begin
                           if length(t1) = 6 then t1 := LeftStr(t1, 5)
@@ -216,13 +234,58 @@ begin
                   //showmessage('Day:' + CurrentDay + ' Rain:' + P);
                   Min := t1[4] + t1[5];
                   //showmessage(t1 +'     ' + Min);
+
+                  //Do convertion to Metric units
+                  if xTemp.Text = 'F' then
+                       begin
+                          S[2] := FloatToStrf((StrToFloat(S[2]) - 32) / 1.8, ffFixed,3,2);    //Temp Out
+                          S[20] := FloatToStrf((StrToFloat(S[20]) - 32) / 1.8, ffFixed,3,2);  //Temp In
+                          S[6] := FloatToStrf((StrToFloat(S[6]) - 32) / 1.8, ffFixed,3,2);    //Dew Point
+                          S[12] := FloatToStrf((StrToFloat(S[12]) - 32) / 1.8, ffFixed,3,2);  //Wind Chill
+                       end;
+                   if xBar.Text = 'inHg' then S[15] := FloatToStrf(StrToFloat(S[15]) * 33.86, ffFixed,4,2);
+                    //    mBar: Do Nothing;
+                    //    hPa:  Do Nothing;
+                   case xWind.Text of
+                       'MPH': begin
+                                     S[7] := FloatToStrf((StrToFloat(S[7]) * 1.609344 ), ffFixed,3,2);   //Wind Speed
+                                     S[10] := FloatToStrf((StrToFloat(S[10]) * 1.609344 ), ffFixed,3,2);  //Wind Gust
+                              end;
+                       'Knots': begin
+                                     S[7] := FloatToStrf((StrToFloat(S[7]) * 1.85199 ), ffFixed,3,2);  //Wind Speed
+                                     S[10] := FloatToStrf((StrToFloat(S[10]) * 1.85199 ), ffFixed,3,2); //Wind Gust
+                                end;
+                       'm/sec': begin
+                                     S[7] := FloatToStrf((StrToFloat(S[7]) * 3.6 ), ffFixed,3,2);   //Wind Speed
+                                     S[10] := FloatToStrf((StrToFloat(S[10]) * 3.6 ), ffFixed,3,2);  //Wind Gust
+                                end;
+                       // Km/Hr:  Do nothing;
+                   end;
+                   if (xWdir.Text = 'Compass') or (xWdir.Text = 'Cardinal') then
+                       case S[8] of
+                            'N': S[8] := '0';
+                            'NNE': S[8] := '22';
+                            'NE': S[8] := '45';
+                            'ENE': S[8] := '67';
+                            'E': S[8] := '90';
+                            'ESE': S[8] := '112';
+                            'SE': S[8] := '135';
+                            'SSE': S[8] := '157';
+                            'S': S[8] := '180';
+                            'SSW': S[8] := '202';
+                            'SW': S[8] := '225';
+                            'WSW': S[8] := '247';
+                            'W': S[8] := '270';
+                            'WNW': S[8] := '292';
+                            'NW': S[8] := '315';
+                            'NNW': S[8] := '337';
+                       end;
+                       //'Degrees': Do Nothing;
+
                   if SampleTime15.Checked then
                      begin
                           if (Min = '00') or (Min = '15') or (Min = '30') or (Min = '45') then
                              begin
-                             
-                             //Make this a procedure
-                             
                                   sOut := intToStr(i) + ' t:' + t2;
                                   sOut := sOut + ' T:' + S[2];
                                   sOut := sOut + ' Ti:' + S[20];
@@ -300,7 +363,7 @@ begin
                           end;
                      end;
           end;
-    // To Do Verify that all months have data, if not add t:010030 V:4
+
 finally
   CloseFile(tfIn);
   CloseFile(M1);
@@ -344,6 +407,11 @@ begin
 end;
 
 procedure TForm1.ddmmyyClick(Sender: TObject);
+begin
+
+end;
+
+procedure TForm1.Label3Click(Sender: TObject);
 begin
 
 end;

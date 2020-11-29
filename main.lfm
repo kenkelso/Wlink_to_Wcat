@@ -1,17 +1,17 @@
 object Form1: TForm1
-  Left = 753
-  Height = 258
-  Top = 372
-  Width = 529
+  Left = 337
+  Height = 447
+  Top = 573
+  Width = 527
   Caption = 'WeatherLink to WeatherCAT Data Converter'
-  ClientHeight = 258
-  ClientWidth = 529
+  ClientHeight = 447
+  ClientWidth = 527
   LCLVersion = '2.0.10.0'
   object Button1: TButton
-    Left = 32
-    Height = 25
-    Top = 208
-    Width = 75
+    Left = 208
+    Height = 41
+    Top = 368
+    Width = 96
     Caption = 'Convert'
     OnClick = Button1Click
     TabOrder = 0
@@ -51,20 +51,24 @@ object Form1: TForm1
     ParentColor = False
   end
   object SampleTime15: TCheckBox
-    Left = 152
+    Left = 280
     Height = 18
-    Top = 215
+    Hint = 'Reduces amount of data'
+    Top = 172
     Width = 128
     Caption = '15 minute samples'
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
   object Label3: TLabel
     Left = 32
     Height = 16
     Top = 11
-    Width = 28
-    Caption = 'V2.0'
+    Width = 37
+    Caption = 'V2.1.0'
     ParentColor = False
+    OnClick = Label3Click
   end
   object Edit1: TEdit
     Left = 152
@@ -82,22 +86,148 @@ object Form1: TForm1
     Caption = 'DataFile Version'
     ParentColor = False
   end
-  object mmddyy: TCheckBox
-    Left = 296
-    Height = 18
-    Top = 64
-    Width = 157
-    Caption = 'MM/DD/YY Date Format'
-    DragMode = dmAutomatic
-    OnClick = mmddyyClick
+  object xTemp: TComboBox
+    Left = 32
+    Height = 20
+    Top = 225
+    Width = 96
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'C'
+      'F'
+    )
     TabOrder = 5
+    Text = 'C'
+  end
+  object xWind: TComboBox
+    Left = 32
+    Height = 20
+    Top = 273
+    Width = 96
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'Km/Hr'
+      'MPH'
+      'Knots'
+      'm/sec'
+    )
+    TabOrder = 6
+    Text = 'Km/Hr'
+  end
+  object xWdir: TComboBox
+    Left = 32
+    Height = 20
+    Top = 321
+    Width = 96
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'Degrees'
+      'Compass'
+      'Cardinal'
+    )
+    TabOrder = 7
+    Text = 'Degrees'
+  end
+  object Label5: TLabel
+    Left = 34
+    Height = 16
+    Top = 208
+    Width = 77
+    Caption = 'Temperature'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 33
+    Height = 16
+    Top = 256
+    Width = 73
+    Caption = 'Wind Speed'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 35
+    Height = 16
+    Top = 303
+    Width = 89
+    Caption = 'Wind Direction'
+    ParentColor = False
+  end
+  object xDate: TComboBox
+    Left = 153
+    Height = 20
+    Top = 225
+    Width = 84
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'DD/MM/YY'
+      'MM/DD/YY'
+    )
+    TabOrder = 8
+    Text = 'DD/MM/YY'
+  end
+  object xBar: TComboBox
+    Left = 154
+    Height = 20
+    Top = 274
+    Width = 81
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'mBar'
+      'inHg'
+      'hPa'
+    )
+    TabOrder = 9
+    Text = 'mBar'
+  end
+  object Label8: TLabel
+    Left = 153
+    Height = 16
+    Top = 208
+    Width = 75
+    Caption = 'Date Format'
+    ParentColor = False
+  end
+  object Label9: TLabel
+    Left = 156
+    Height = 16
+    Top = 257
+    Width = 53
+    Caption = 'Pressure'
+    ParentColor = False
+  end
+  object xRain: TComboBox
+    Left = 152
+    Height = 20
+    Top = 322
+    Width = 82
+    ItemHeight = 19
+    ItemIndex = 0
+    Items.Strings = (
+      'mm'
+      'Inch'
+    )
+    TabOrder = 10
+    Text = 'mm'
+  end
+  object Label10: TLabel
+    Left = 153
+    Height = 16
+    Top = 303
+    Width = 76
+    Caption = 'Precipitation'
+    ParentColor = False
   end
   object OpenDialog1: TOpenDialog
     Left = 384
-    Top = 208
+    Top = 392
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    Left = 451
-    Top = 208
+    Left = 440
+    Top = 392
   end
 end
