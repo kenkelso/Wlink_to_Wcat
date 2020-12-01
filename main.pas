@@ -12,9 +12,9 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
+    btnConvert: TButton;
+    btnWlink: TButton;
+    btnWcat: TButton;
     Label10: TLabel;
     xRain: TComboBox;
     Label8: TLabel;
@@ -28,19 +28,16 @@ type
     xTemp: TComboBox;
     xWind: TComboBox;
     SampleTime15: TCheckBox;
-    Edit1: TEdit;
+    edtVersion: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     OpenDialog1: TOpenDialog;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
-    procedure ddmmyyClick(Sender: TObject);
-    procedure Label3Click(Sender: TObject);
-    procedure mmddyyClick(Sender: TObject);
+    procedure btnConvertClick(Sender: TObject);
+    procedure btnWlinkClick(Sender: TObject);
+    procedure btnWcatClick(Sender: TObject);
 
   private
     { private declarations }
@@ -52,20 +49,17 @@ type
 
 var
   Form1: TForm1;
-procedure MakeCSV(S1: string);
 implementation
 
 {$R *.lfm}
 
 
-
-
 { TForm1 }
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.btnConvertClick(Sender: TObject);
 
 var
-  tfOut, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12: TextFile;
+  M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12: TextFile;
   sIn, sOut, t1, t2, t3, t4, P, Py, Pm, CurrentDay, CurrentMonth, CurrentYear, Min, sTemp, Verify: string;
   S : TStringList;
   i, TimeInt : integer;
@@ -110,22 +104,21 @@ begin
   AssignFile(M12, WCFileName + '/12_WeatherCatData.cat');
   rewrite(M12);
 
-  writeln(M1, Edit1.Text);
-  writeln(M2, Edit1.Text);
-  writeln(M3, Edit1.Text);
-  writeln(M4, Edit1.Text);
-  writeln(M5, Edit1.Text);
-  writeln(M6, Edit1.Text);
-  writeln(M7, Edit1.Text);
-  writeln(M8, Edit1.Text);
-  writeln(M9, Edit1.Text);
-  writeln(M10, Edit1.Text);
-  writeln(M11, Edit1.Text);
-  writeln(M12, Edit1.Text);
+  writeln(M1, edtVersion.Text);
+  writeln(M2, edtVersion.Text);
+  writeln(M3, edtVersion.Text);
+  writeln(M4, edtVersion.Text);
+  writeln(M5, edtVersion.Text);
+  writeln(M6, edtVersion.Text);
+  writeln(M7, edtVersion.Text);
+  writeln(M8, edtVersion.Text);
+  writeln(M9, edtVersion.Text);
+  writeln(M10, edtVersion.Text);
+  writeln(M11, edtVersion.Text);
+  writeln(M12, edtVersion.Text);
 
 
   AssignFile(tfIn, WLFileName);
-//  ShowMessage(WCFileName + '/12_WeatherCatData.cat');
 
   // Use exceptions to catch errors (this is the default so not absolutely requried)
   {$I+}
@@ -162,13 +155,11 @@ begin
                      sIn := sTemp;
                 end;
 
-           //  showmessage(sIn);
              S.Delimiter:=' ';
              S.DelimitedText:=sIn;
              //deal with date and time
              t2 := '';
              t1 := S[0];  //put string in a stringlist
-          //   showmessage(t1);
              if (t1[1] <> '-') and (S[2] <> '---') then
                 begin
                      if CurrentYear = '' then CurrentYear := t1[7] + t1[8];
@@ -176,23 +167,19 @@ begin
                      if xDate.Text = 'MM/DD/YY' then t2 := t1[4] + t1[5]
                      else t2 := t1[1] + t1[2];
                      //calculate daily and monthly rain
-                     //showmessage(t2);
                      if CurrentDay <> t2 then
                      begin
                           CurrentDay := t2;
                           DailyRain := 0.00;
                      end;
                      DailyRain := DailyRain + strToFloat(S[16]);
-                     //showmessage('DailyRain='+S[16]);
                      //Convert DailyRain to mm if reqd.
                      if xRain.Text = 'Inch' then P := floatToStrF(DailyRain * 25.4, ffFixed , 4, 2)
                         else P := floatToStrF(DailyRain, ffFixed , 4, 2);
 
                      t3 := S[0];
-                     //showmessage(t3);
                      if xDate.Text = 'MM/DD/YY' then t4 := t3[1] + t3[2]
                      else t4 := t3[4] + t3[5];
-                 //    showmessage('CurrentMonth='+t4);
                      if CurrentMonth <> t4 then
                         begin
                              CurrentMonth := t4;
@@ -203,7 +190,6 @@ begin
                   //Convert MonthlyRain to mm if Reqd.
                   if xRain.Text = 'Inch' then Pm := floatToStrF(MonthlyRain * 25.4, ffFixed ,4, 2)
                      else Pm := floatToStrF(MonthlyRain, ffFixed ,4, 2);
-                  //showmessage('PM='+Pm);
                   YearlyRain := YearlyRain + strToFloat(S[16]);
                   //Convert YealyRain to mm if Reqd.
                   if xRain.Text = 'Inch' then Py := floatToStrF(YearlyRain * 25.4, ffFixed, 4, 2)
@@ -215,7 +201,6 @@ begin
                           if length(t1) = 6 then t1 := LeftStr(t1, 5)
                              else t1 := LeftStr(t1, 4);
                           if LeftStr(t1, 2) = '12' then t1 := '0' + RightStr(t1 ,3);
-                       //   showmessage(' am to 24 = ' + t1);
                      end;
                   if pos('p', t1) > 0 then
                      begin
@@ -225,16 +210,11 @@ begin
                           TimeInt := StrToInt(LeftStr(t1, Pos(':', t1) - 1));
                           TimeInt := TimeInt + 12;
                           t1 := IntToStr(TimeInt) + RightStr(t1, 3);
-                      //    showmessage(' pm to 24 = ' + t1);
                      end;
                   // pad time if necessary
                   if length(t1) = 4 then t1 := '0' + t1;
                   t2 := t2 + t1[1] + t1[2] +t1[4] + t1[5];
-
-                  //showmessage('Day:' + CurrentDay + ' Rain:' + P);
                   Min := t1[4] + t1[5];
-                  //showmessage(t1 +'     ' + Min);
-
                   //Do convertion to Metric units
                   if xTemp.Text = 'F' then
                        begin
@@ -363,7 +343,6 @@ begin
                           end;
                      end;
           end;
-
 finally
   CloseFile(tfIn);
   CloseFile(M1);
@@ -378,6 +357,26 @@ finally
   CloseFile(M10);
   CloseFile(M11);
   CloseFile(M12);
+
+
+
+  for i := 1 to 12 do
+      begin
+           AssignFile(M1, WCFileName + '/' +IntToStr(i) + '_WeatherCatData.cat');
+           reset(M1);
+           readln(M1, Verify);
+           readln(M1, Verify);
+           if Verify = '' then
+              begin
+                 rewrite(M1);
+                 Writeln(M1, edtVersion.Text);
+                 WriteLn(M1, 't:010000 V:4');
+              end;
+           CloseFile(M1);
+      end;
+
+
+
   // Give feedback and wait for key press
   showmessage('Done');
 end;
@@ -392,39 +391,19 @@ end;
   S.Free;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.btnWlinkClick(Sender: TObject);
 begin
    OpenDialog1.Execute;
    WLFileName := OpenDialog1.FileName;
    Label1.Caption:=WLFileName;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TForm1.btnWcatClick(Sender: TObject);
 begin
    SelectDirectoryDialog1.Execute;
    WCFileName := SelectDirectoryDialog1.FileName;
    Label2.Caption:=WCFileName;
 end;
 
-procedure TForm1.ddmmyyClick(Sender: TObject);
-begin
-
-end;
-
-procedure TForm1.Label3Click(Sender: TObject);
-begin
-
-end;
-
-procedure TForm1.mmddyyClick(Sender: TObject);
-begin
-
-end;
-
-procedure MakeCSV(S1: string);
-
-begin
-
-end;
 end.
 

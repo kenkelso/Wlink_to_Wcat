@@ -15,10 +15,11 @@
     </i18n>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MajorVersionNr Value="1"/>
-      <MinorVersionNr Value="1"/>
+      <MajorVersionNr Value="2"/>
+      <MinorVersionNr Value="2"/>
+      <Language Value="0809"/>
       <Attributes pvaPreRelease="True"/>
-      <StringTable CompanyName="Curve Design Solutions" FileDescription="WeatherLink to WeatherCat Data converter" ProductVersion="0"/>
+      <StringTable CompanyName="Curve Design Solutions" FileDescription="WeatherLink to WeatherCat Data converter" ProductVersion="2.1.0.0"/>
     </VersionInfo>
     <MacroValues Count="1">
       <Macro1 Name="LCLWidgetType" Value="cocoa"/>
@@ -79,7 +80,6 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2"/>
       </Debugging>
       <Options>
