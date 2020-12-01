@@ -9,6 +9,7 @@ Make sure you have a backup of your data before using the App. I take no respons
 If you have months with no data the WeatherCat file must contain at least the following:
 
 VERS:3
+
 t:010000 V:4
 
 This application only converts data from a basic Davis Vantage Pro station, optional sensors such as Solar and Soil moisture are set to 0. Hourly Rain is not calculated.
