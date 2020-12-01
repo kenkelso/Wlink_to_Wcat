@@ -12,7 +12,7 @@ VERS:3
 
 t:010000 V:4
 
-This application only converts data from a basic Davis Vantage Pro station, optional sensors such as Solar and Soil moisture are set to 0. Hourly Rain is not calculated.
+This application only converts data from a basic Davis Vantage Pro station, optional sensors such as Solar and Soil moisture are set to 0. Hourly Rain is not calculated. Daily, monthly and yearly rain are calculated.
 
 1/ Make sure WeatherCat is not running.
 2/ Make a folder to do the conversion in, create sub-folders for each year of data being converted i.e. 2006, 2007, 2008 etc.
